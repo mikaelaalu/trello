@@ -1,9 +1,13 @@
+import Header from './components/Header'
+import Login from './components/Login'
+
 export default function Home({ data }) {
   console.log('data', data)
 
   return (
     <div>
-      <h3>Hello trello</h3>
+      <Header />
+      <Login />
     </div>
   )
 }
