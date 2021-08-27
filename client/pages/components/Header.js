@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { H2 } from './Typography'
 
 const Wrapper = styled.header`
 background-color: aliceblue;
@@ -12,7 +11,7 @@ height: 100px;
 const Header = () => {
     return (
         <Wrapper>
-            <H2>Trello</H2>
+            <h2>Trello</h2>
         </Wrapper>
     )
 }
