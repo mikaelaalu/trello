@@ -14,8 +14,8 @@ app.get('/', (request, response) => {
 
 app.post('/boards', db.createBoard)
 app.get('/boards', db.getBoards)
+app.get('/boards/:id', db.getBoardFromId)
 app.delete('/boards/:id', db.deleteBoard)
-
 
 
 app.listen(port, () => console.log(`Listening on ${port}`))

@@ -27,6 +27,17 @@ const getBoards = (request, response) => {
     })
 }
 
+const getBoardFromId = (request, response) => {
+    const id = parseInt(request.params.id)
+    pool.query('SELECT * FROM boards WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows[0])
+    })
+}
+
+
 const deleteBoard = (request, response) => {
     const id = parseInt(request.params.id)
     pool.query('DELETE FROM boards WHERE id = $1', [id], (error, results) => {
@@ -37,11 +48,10 @@ const deleteBoard = (request, response) => {
     })
 }
 
-
-
-
 module.exports = {
     getBoards,
+    getBoardFromId,
     createBoard,
     deleteBoard,
+
 }

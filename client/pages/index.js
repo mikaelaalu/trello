@@ -2,6 +2,7 @@ import Header from './components/Header'
 import Login from './components/Form'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router';
+import Link from 'next/link'
 
 export default function Home({ boards }) {
   const [formValue, setFormValue] = useState('')
@@ -51,17 +52,24 @@ export default function Home({ boards }) {
   }
 
   return (
-    <div>
+    <div style={{ padding: '1rem' }}>
       {/* <Header /> */}
       {/* <Login /> */}
-      {boards.map((board, i) => {
-        return (
-          <div key={i}>
-            <p>{board.name}</p>
-            <button onClick={(e) => deleteBoard(e, board.id)}>Delete board</button>
-          </div>
-        )
-      })}
+      <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        {boards.map((board, i) => {
+          return (
+            <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+              <p>{board.name}</p>
+              <div style={{ width: '10rem' }}>
+                <button onClick={(e) => deleteBoard(e, board.id)}>Delete board</button>
+                <Link href={`/boards/${board.id}`}>
+                  <button>See board</button>
+                </Link>
+              </div>
+            </div>
+          )
+        })}
+      </div>
 
       <form onSubmit={createBoard}>
         <label>Board name</label>
@@ -72,7 +80,7 @@ export default function Home({ boards }) {
   )
 }
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
   const req = await fetch('http://localhost:4000/boards')
   const boards = await req.json();
 
