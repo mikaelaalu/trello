@@ -70,7 +70,7 @@ const getColumns = (req, res) => {
 
 const deleteColumn = (req, res) => {
     const id = parseInt(req.params.id)
-    pool.query('DELETE FROM column WHERE id = $1', [id], (error, results) => {
+    pool.query('DELETE FROM columns WHERE id = $1', [id], (error, results) => {
         if (error) {
             throw error
         }

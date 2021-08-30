@@ -18,7 +18,7 @@ app.get('/boards/:id', db.getBoardFromId)
 app.delete('/boards/:id', db.deleteBoard)
 app.post('/columns', db.createColumn)
 app.get('/columns/:id', db.getColumns)
-app.delete('/column/:id', db.deleteColumn)
+app.delete('/columns/:id', db.deleteColumn)
 
 
 app.listen(port, () => console.log(`Listening on ${port}`))

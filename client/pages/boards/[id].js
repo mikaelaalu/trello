@@ -1,9 +1,15 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router';
 
 const BoardDetails = ({ board, columns }) => {
     const [formValue, setFormValue] = useState('')
 
-    console.log('column', columns)
+
+    const router = useRouter();
+
+    const refreshData = () => {
+        router.replace(router.asPath);
+    }
 
     const addColumn = (boardId) => {
         fetch('http://localhost:4000/columns', {
@@ -22,6 +28,23 @@ const BoardDetails = ({ board, columns }) => {
             })
     }
 
+    const deleteColumn = (columnId, e) => {
+        console.log('delete')
+        e.preventDefault()
+        fetch(`http://localhost:4000/columns/${columnId}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            mode: "cors",
+        })
+            .then((res) => res.json())
+            .then((info) => {
+                console.log('Column deleted', info)
+                refreshData()
+            })
+    }
+
     return (
         <>
             <div>
@@ -37,6 +60,7 @@ const BoardDetails = ({ board, columns }) => {
                                 display: 'flex', flexDirection: 'column', margin: '0 0.5rem', width: '100px', backgroundColor: 'coral', alignItems: 'center', justifyContent: 'center'
                             }}>
                                 <p>{column.name}</p>
+                                <button onClick={(e) => deleteColumn(column.id, e)}>Delete column</button>
                             </div>
                         )
                     })}
