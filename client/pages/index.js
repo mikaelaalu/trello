@@ -32,7 +32,8 @@ export default function Home({ boards }) {
       })
   }
 
-  const deleteBoard = (e, boardId) => {
+  const deleteBoard = (boardId, e) => {
+    console.log('delete')
     e.preventDefault();
     fetch(`http://localhost:4000/boards/${boardId}`, {
       method: 'DELETE',
@@ -41,10 +42,7 @@ export default function Home({ boards }) {
       },
       mode: "cors",
     })
-      .then((res) => {
-        console.log('respone', res)
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((info) => {
         console.log('Board deleted', info)
         refreshData()
@@ -61,7 +59,7 @@ export default function Home({ boards }) {
             <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
               <p>{board.name}</p>
               <div style={{ width: '10rem' }}>
-                <button onClick={(e) => deleteBoard(e, board.id)}>Delete board</button>
+                <button onClick={(e) => deleteBoard(board.id, e)}>Delete board</button>
                 <Link href={`/boards/${board.id}`}>
                   <button>See board</button>
                 </Link>
