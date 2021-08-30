@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router';
+import TaskForm from '../components/TaskForm';
 
 const BoardDetails = ({ board, columns, tasks }) => {
     const [columnFormValue, setColumnFormValue] = useState('')
-    const [taskFormValue, setTaskFormValue] = useState('')
     const router = useRouter();
 
     const refreshData = () => {
@@ -20,6 +20,7 @@ const BoardDetails = ({ board, columns, tasks }) => {
             mode: "cors",
         })
             .then((res) => {
+                setColumnFormValue('')
                 return res.json();
             })
             .then((data) => {
@@ -27,9 +28,7 @@ const BoardDetails = ({ board, columns, tasks }) => {
             })
     }
 
-    const deleteColumn = (columnId, e) => {
-        console.log('delete')
-        e.preventDefault()
+    const deleteColumn = (columnId) => {
         fetch(`http://localhost:4000/columns/${columnId}`, {
             method: 'DELETE',
             headers: {
@@ -44,22 +43,21 @@ const BoardDetails = ({ board, columns, tasks }) => {
             })
     }
 
-    const addTask = (columnId, boardId) => {
-        fetch('http://localhost:4000/tasks', {
-            method: 'POST',
-            body: JSON.stringify({ name: taskFormValue, columnId, boardId }),
+    const deleteTask = (taskId) => {
+        fetch(`http://localhost:4000/tasks/${taskId}`, {
+            method: 'DELETE',
             headers: {
                 "Content-Type": "application/json"
             },
             mode: "cors",
         })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log('Task created', data)
+            .then((res) => res.json())
+            .then((info) => {
+                console.log('Task deleted', info)
+                refreshData()
             })
     }
+
 
     return (
         <>
@@ -76,19 +74,18 @@ const BoardDetails = ({ board, columns, tasks }) => {
                             <div key={i} style={{
                                 display: 'flex', flexDirection: 'column', margin: '0 0.5rem', width: '200px', border: '1px solid black', padding: '1rem', alignItems: 'center', justifyContent: 'center'
                             }}>
-                                <button onClick={(e) => deleteColumn(column.id, e)}>Delete column</button>
+                                <button onClick={() => deleteColumn(column.id)}>Delete column</button>
                                 <h3>{column.name}</h3>
 
-                                {filteredTasks.map((task) => {
+                                {filteredTasks.map((task, i) => {
                                     return (
-                                        <p>{task.name}</p>
+                                        <div key={i}>
+                                            <p>{task.name}</p>
+                                            <button onClick={() => deleteTask(task.id)}>Delete task</button>
+                                        </div>
                                     )
                                 })}
-                                <form onSubmit={() => addTask(column.id, board.id)}>
-                                    <label>Add task</label>
-                                    <input type='text' name='Task' value={taskFormValue} onChange={(e) => setTaskFormValue(e.target.value)} />
-                                    <button type='submit'>Add task</button>
-                                </form>
+                                <TaskForm columnId={column.id} boardId={board.id} refreshData={refreshData} />
                             </div>
                         )
                     })}

@@ -24,6 +24,7 @@ export default function Home({ boards }) {
       mode: "cors",
     })
       .then((res) => {
+        setFormValue('')
         return res.json();
       })
       .then((info) => {
@@ -32,9 +33,7 @@ export default function Home({ boards }) {
       })
   }
 
-  const deleteBoard = (boardId, e) => {
-    console.log('delete')
-    e.preventDefault();
+  const deleteBoard = (boardId) => {
     fetch(`http://localhost:4000/boards/${boardId}`, {
       method: 'DELETE',
       headers: {
@@ -59,7 +58,7 @@ export default function Home({ boards }) {
             <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
               <p>{board.name}</p>
               <div style={{ width: '10rem' }}>
-                <button onClick={(e) => deleteBoard(board.id, e)}>Delete board</button>
+                <button onClick={() => deleteBoard(board.id)}>Delete board</button>
                 <Link href={`/boards/${board.id}`}>
                   <button>See board</button>
                 </Link>

@@ -98,6 +98,17 @@ const getTasks = (req, res) => {
     })
 }
 
+const deleteTask = (req, res) => {
+    const id = parseInt(req.params.id)
+    pool.query('DELETE FROM tasks WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).send(results)
+    })
+}
+
+
 
 
 
@@ -110,5 +121,6 @@ module.exports = {
     createColumn,
     deleteColumn,
     createTask,
-    getTasks
+    getTasks,
+    deleteTask
 }

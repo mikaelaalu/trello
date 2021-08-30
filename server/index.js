@@ -21,6 +21,7 @@ app.get('/columns/:id', db.getColumns)
 app.delete('/columns/:id', db.deleteColumn)
 app.post('/tasks', db.createTask)
 app.get('/tasks/:id', db.getTasks)
+app.delete('/tasks/:id', db.deleteTask)
 
 
 app.listen(port, () => console.log(`Listening on ${port}`))
