@@ -78,6 +78,26 @@ const deleteColumn = (req, res) => {
     })
 }
 
+const createTask = (req, res) => {
+    const { columnId, boardId, name, description } = req.body
+    pool.query('INSERT INTO tasks (column_id, board_id, name, description) VALUES ($1, $2, $3, $4) RETURNING *', [columnId, boardId, name, description], (error, result) => {
+        if (error) {
+            throw error
+        }
+        res.status(201).send(result.rows[0])
+    })
+}
+
+const getTasks = (req, res) => {
+    const boardId = parseInt(req.params.id)
+    pool.query('SELECT * FROM tasks WHERE board_id = $1', [boardId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).json(results.rows)
+    })
+}
+
 
 
 
@@ -88,5 +108,7 @@ module.exports = {
     deleteBoard,
     getColumns,
     createColumn,
-    deleteColumn
+    deleteColumn,
+    createTask,
+    getTasks
 }
