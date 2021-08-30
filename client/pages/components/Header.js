@@ -1,18 +1,20 @@
 import styled from 'styled-components'
+import { H2 } from './Typography'
 
-const Wrapper = styled.header`
-background-color: aliceblue;
+const Container = styled.div`
+height: 4rem;
+background-color: #016aa6;
+margin: 0;
 display: flex;
-justify-content: center;
 align-items: center;
-height: 100px;
+justify-content: center;
 `
 
 const Header = () => {
     return (
-        <Wrapper>
-            <h2>Trello</h2>
-        </Wrapper>
+        <Container>
+            <H2>Trello</H2>
+        </Container>
     )
 }
 

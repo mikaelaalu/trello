@@ -1,6 +1,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import TaskForm from '../components/TaskForm';
+import { H3 } from '../components/Typography';
+import { StyledForm, FormInput } from '../components/Form'
+import Button from '../components/Button';
+
+const Wrapper = styled.div`
+display: flex;
+flex-direction: column;
+width: 100vw;
+height: 100vh;
+padding: 1rem;
+`
 
 const BoardDetails = ({ board, columns, tasks }) => {
     const [columnFormValue, setColumnFormValue] = useState('')
@@ -60,13 +72,12 @@ const BoardDetails = ({ board, columns, tasks }) => {
 
 
     return (
-        <>
+
+        <Wrapper>
             <div>
-                <h3>Board details</h3>
-                <p>{board.name}, ID {board.id}</p>
+                <H3>{board.name}</H3>
             </div>
             <div>
-                <h5>Columns</h5>
                 <div style={{ display: 'flex', marginBottom: '2rem' }}>
                     {columns.map((column, i) => {
                         const filteredTasks = tasks.filter((task) => task.column_id === column.id)
@@ -92,12 +103,11 @@ const BoardDetails = ({ board, columns, tasks }) => {
                 </div>
             </div >
 
-            <form onSubmit={() => addColumn(board.id)}>
-                <label>Column</label>
-                <input type='text' name='Column' value={columnFormValue} onChange={(e) => setColumnFormValue(e.target.value)} />
-                <button type='submit'>Add column</button>
-            </form>
-        </>
+            <StyledForm onSubmit={() => addColumn(board.id)}>
+                <FormInput placeholder='Column title' type='text' name='Column' value={columnFormValue} onChange={(e) => setColumnFormValue(e.target.value)} />
+                <Button text="Add column" />
+            </StyledForm>
+        </Wrapper>
     )
 }
 
