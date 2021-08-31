@@ -44,22 +44,20 @@ const deleteBoard = (req, res) => {
         if (error) {
             throw error
         }
-        res.status(200).send(results)
+        pool.query('DELETE FROM columns WHERE board_id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            pool.query('DELETE FROM tasks WHERE board_id = $1', [id], (error, results) => {
+                if (error) {
+                    throw error
+                }
+                res.status(200).send(results)
+            })
+        })
     })
 
-    // pool.query('DELETE FROM columns WHERE board_id = $1', [id], (error, results) => {
-    //     if (error) {
-    //         throw error
-    //     }
-    //     res.status(200).send(results)
-    // })
 
-    // pool.query('DELETE FROM tasks WHERE board_id = $1', [id], (error, results) => {
-    //     if (error) {
-    //         throw error
-    //     }
-    //     res.status(200).send(results)
-    // })
 }
 
 const createColumn = (req, res) => {
@@ -88,15 +86,15 @@ const deleteColumn = (req, res) => {
         if (error) {
             throw error
         }
-        res.status(200).send(results)
+        pool.query('DELETE FROM tasks WHERE column_id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            res.status(200).send(results)
+        })
     })
 
-    // pool.query('DELETE FROM tasks WHERE column_id = $1', [id], (error, results) => {
-    //     if (error) {
-    //         throw error
-    //     }
-    //     res.status(200).send(results)
-    // })
+
 }
 
 const createTask = (req, res) => {
