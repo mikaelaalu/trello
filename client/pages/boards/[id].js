@@ -14,6 +14,18 @@ height: 100vh;
 padding: 1rem;
 `
 
+const ColumnWrapper = styled.div`
+display: flex;
+flex-direction: column;
+margin: 0 0.5rem;
+width: 13rem;
+height: 70vh;
+border: 1px solid black;
+padding: 1rem;
+overflow-y: scroll;
+justify-content: space-between;
+`
+
 const BoardDetails = ({ board, columns, tasks }) => {
     const [columnFormValue, setColumnFormValue] = useState('')
     const router = useRouter();
@@ -74,17 +86,16 @@ const BoardDetails = ({ board, columns, tasks }) => {
     return (
 
         <Wrapper>
+
             <div>
                 <H3>{board.name}</H3>
             </div>
-            <div>
-                <div style={{ display: 'flex', marginBottom: '2rem' }}>
-                    {columns.map((column, i) => {
-                        const filteredTasks = tasks.filter((task) => task.column_id === column.id)
-                        return (
-                            <div key={i} style={{
-                                display: 'flex', flexDirection: 'column', margin: '0 0.5rem', width: '200px', border: '1px solid black', padding: '1rem', alignItems: 'center', justifyContent: 'center'
-                            }}>
+            <div style={{ display: 'flex', marginBottom: '2rem' }}>
+                {columns.map((column, i) => {
+                    const filteredTasks = tasks.filter((task) => task.column_id === column.id)
+                    return (
+                        <ColumnWrapper>
+                            <div>
                                 <button onClick={() => deleteColumn(column.id)}>Delete column</button>
                                 <h3>{column.name}</h3>
 
@@ -96,12 +107,12 @@ const BoardDetails = ({ board, columns, tasks }) => {
                                         </div>
                                     )
                                 })}
-                                <TaskForm columnId={column.id} boardId={board.id} refreshData={refreshData} />
                             </div>
-                        )
-                    })}
-                </div>
-            </div >
+                            <TaskForm columnId={column.id} boardId={board.id} refreshData={refreshData} />
+                        </ColumnWrapper>
+                    )
+                })}
+            </div>
 
             <StyledForm onSubmit={() => addColumn(board.id)}>
                 <FormInput placeholder='Column title' type='text' name='Column' value={columnFormValue} onChange={(e) => setColumnFormValue(e.target.value)} />

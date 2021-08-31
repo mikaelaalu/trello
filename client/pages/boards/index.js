@@ -12,11 +12,11 @@ width: 100vw;
 display: flex;
 justify-content: center;
 `
-
 const Wrapper = styled.div`
 border: 1px solid black;
 width: 60vw;
 height: 100vh;
+padding: 1rem;
 `
 const FlexWrapContainer = styled.div`
 display: flex;
@@ -33,11 +33,7 @@ margin: 1rem;
 width: 10rem;
 height: 7rem;
 align-items: center;
-
-&:hover{
-    background-color: #fafafa;
-    cursor: pointer;
-}
+justify-content: space-between;
 `
 const StyledForm = styled.form`
 display: flex;
@@ -95,14 +91,12 @@ export default function Home({ boards }) {
                 <FlexWrapContainer>
                     {boards.map((board, i) => {
                         return (
-                            <Link href={`/boards/${board.id}`}>
-                                <ColumnFlex key={i}>
+                            <ColumnFlex key={i}>
+                                <Link href={`/boards/${board.id}`}>
                                     <Paragraph>{board.name}</Paragraph>
-                                    {/* <div style={{ width: '10rem' }}>
-                                    <button onClick={() => deleteBoard(board.id)}>Delete board</button>
-                                </div> */}
-                                </ColumnFlex>
-                            </Link>
+                                </Link>
+                                <button onClick={() => deleteBoard(board.id)}>Delete board</button>
+                            </ColumnFlex>
                         )
                     })}
                 </FlexWrapContainer>
