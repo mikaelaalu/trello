@@ -14,9 +14,8 @@ justify-content: center;
 `
 const Wrapper = styled.div`
 border: 1px solid black;
-width: 60vw;
+width: 51rem;
 height: 100vh;
-padding: 1rem;
 `
 const FlexWrapContainer = styled.div`
 display: flex;

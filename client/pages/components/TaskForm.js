@@ -3,14 +3,13 @@ import { useState } from 'react'
 
 
 
-const TaskForm = ({ columnId, boardId }) => {
+const TaskForm = ({ columnId }) => {
     const [taskFormValue, setTaskFormValue] = useState('')
 
-    const addTask = (columnId, boardId) => {
-        console.log('board', boardId)
+    const addTask = (columnId) => {
         fetch('http://localhost:4000/tasks', {
             method: 'POST',
-            body: JSON.stringify({ name: taskFormValue, columnId, boardId }),
+            body: JSON.stringify({ name: taskFormValue, columnId }),
             headers: {
                 "Content-Type": "application/json"
             },
@@ -25,7 +24,7 @@ const TaskForm = ({ columnId, boardId }) => {
             })
     }
     return (
-        <form onSubmit={() => addTask(columnId, boardId)}>
+        <form onSubmit={() => addTask(columnId)}>
             <label>Add task</label>
             <input type='text' name='Task' value={taskFormValue} onChange={(e) => setTaskFormValue(e.target.value)} />
             <button type='submit'>Add task</button>

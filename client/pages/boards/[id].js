@@ -5,15 +5,12 @@ import TaskForm from '../components/TaskForm';
 import { H3 } from '../components/Typography';
 import { StyledForm, FormInput } from '../components/Form'
 import Button from '../components/Button';
+import PopUp from '../components/PopUp';
 
 const Wrapper = styled.div`
 display: flex;
 flex-direction: column;
-width: 100vw;
-height: 100vh;
-padding: 1rem;
 `
-
 const ColumnWrapper = styled.div`
 display: flex;
 flex-direction: column;
@@ -26,8 +23,9 @@ overflow-y: scroll;
 justify-content: space-between;
 `
 
-const BoardDetails = ({ board, columns, tasks }) => {
+const BoardDetails = ({ board }) => {
     const [columnFormValue, setColumnFormValue] = useState('')
+    const [popUpInfo, setPopUpInfo] = useState()
     const router = useRouter();
 
     const refreshData = () => {
@@ -81,29 +79,26 @@ const BoardDetails = ({ board, columns, tasks }) => {
                 refreshData()
             })
     }
-
-
     return (
-
         <Wrapper>
-
-            <div>
+            {/* {popUpInfo && <PopUp onCloseClick={() => setPopUpInfo(null)} popUpInfo={popUpInfo} />} */}
+            <div style={{ padding: '1rem' }}>
                 <H3>{board.name}</H3>
             </div>
             <div style={{ display: 'flex', marginBottom: '2rem' }}>
-                {columns.map((column, i) => {
-                    const filteredTasks = tasks.filter((task) => task.column_id === column.id)
+                {board.columns.map((column, i) => {
                     return (
-                        <ColumnWrapper>
+                        <ColumnWrapper key={i}>
                             <div>
                                 <button onClick={() => deleteColumn(column.id)}>Delete column</button>
                                 <h3>{column.name}</h3>
 
-                                {filteredTasks.map((task, i) => {
+                                {column.tasks.map((task, i) => {
                                     return (
                                         <div key={i}>
                                             <p>{task.name}</p>
                                             <button onClick={() => deleteTask(task.id)}>Delete task</button>
+                                            <button onClick={() => setPopUpInfo(task)}>Update task</button>
                                         </div>
                                     )
                                 })}
@@ -113,7 +108,6 @@ const BoardDetails = ({ board, columns, tasks }) => {
                     )
                 })}
             </div>
-
             <StyledForm onSubmit={() => addColumn(board.id)}>
                 <FormInput placeholder='Column title' type='text' name='Column' value={columnFormValue} onChange={(e) => setColumnFormValue(e.target.value)} />
                 <Button text="Add column" />
@@ -125,7 +119,7 @@ const BoardDetails = ({ board, columns, tasks }) => {
 export const getStaticPaths = async () => {
     const res = await fetch('http://localhost:4000/boards')
     const data = await res.json()
-
+    console.log('data', data)
     const paths = data.map((board) => {
         return {
             params: { id: board.id.toString() }
@@ -142,13 +136,6 @@ export const getStaticProps = async (context) => {
     const id = context.params.id
     const boardReq = await fetch(`http://localhost:4000/boards/${id}`)
     const board = await boardReq.json();
-
-    const columnsReq = await fetch(`http://localhost:4000/columns/${id}`)
-    const columns = await columnsReq.json()
-
-    const tasksReq = await fetch(`http://localhost:4000/tasks/${id}`)
-    const tasks = await tasksReq.json()
-
     if (!board) {
         return {
             notFound: true,
@@ -156,7 +143,7 @@ export const getStaticProps = async (context) => {
     }
 
     return {
-        props: { board, columns, tasks }
+        props: { board }
     };
 }
 
