@@ -1,12 +1,12 @@
-import styled from 'styled-components'
+import { StyledForm, FormInput } from './Form'
+import Button from './Button'
 import { useState } from 'react'
 
-
-
-const TaskForm = ({ columnId }) => {
+const TaskForm = ({ columnId, refreshData }) => {
     const [taskFormValue, setTaskFormValue] = useState('')
 
-    const addTask = (columnId) => {
+    const addTask = (columnId, e) => {
+        e.preventDefault();
         fetch('http://localhost:4000/tasks', {
             method: 'POST',
             body: JSON.stringify({ name: taskFormValue, columnId }),
@@ -17,18 +17,15 @@ const TaskForm = ({ columnId }) => {
         })
             .then((res) => {
                 setTaskFormValue('')
+                refreshData()
                 return res.json();
-            })
-            .then((data) => {
-                console.log('Task created', data)
             })
     }
     return (
-        <form onSubmit={() => addTask(columnId)}>
-            <label>Add task</label>
-            <input type='text' name='Task' value={taskFormValue} onChange={(e) => setTaskFormValue(e.target.value)} />
-            <button type='submit'>Add task</button>
-        </form>
+        <StyledForm small onSubmit={(e) => addTask(columnId, e)}>
+            <FormInput placeholder='Task title' type='text' name='Task' value={taskFormValue} onChange={(e) => setTaskFormValue(e.target.value)} />
+            <Button text='AddTask' />
+        </StyledForm>
     )
 }
 

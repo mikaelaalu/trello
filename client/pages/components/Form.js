@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const StyledForm = styled.form`
 display: flex;
 flex-direction: column;
-width: 12rem;
+width: ${(props) => props.small ? '10.5rem' : '12rem'};
 `
 const FormInput = styled.input`
 padding: 0.5rem;

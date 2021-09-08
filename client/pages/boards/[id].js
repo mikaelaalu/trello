@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import TaskForm from '../components/TaskForm';
 import { H3 } from '../components/Typography';
 import { StyledForm, FormInput } from '../components/Form'
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
+import TaskForm from '../components/TaskForm';
 
 const Wrapper = styled.div`
 display: flex;
@@ -26,6 +26,7 @@ justify-content: space-between;
 const BoardDetails = ({ board }) => {
     const [columnFormValue, setColumnFormValue] = useState('')
     const [popUpInfo, setPopUpInfo] = useState()
+
     const router = useRouter();
 
     const refreshData = () => {
@@ -45,9 +46,6 @@ const BoardDetails = ({ board }) => {
                 setColumnFormValue('')
                 return res.json();
             })
-            .then((data) => {
-                console.log('Column created', data)
-            })
     }
 
     const deleteColumn = (columnId) => {
@@ -58,10 +56,9 @@ const BoardDetails = ({ board }) => {
             },
             mode: "cors",
         })
-            .then((res) => res.json())
-            .then((info) => {
-                console.log('Column deleted', info)
+            .then((res) => {
                 refreshData()
+                return res.json()
             })
     }
 
@@ -73,21 +70,21 @@ const BoardDetails = ({ board }) => {
             },
             mode: "cors",
         })
-            .then((res) => res.json())
-            .then((info) => {
-                console.log('Task deleted', info)
+            .then((res) => {
                 refreshData()
+                return res.json()
             })
     }
     return (
         <Wrapper>
-            {/* {popUpInfo && <PopUp onCloseClick={() => setPopUpInfo(null)} popUpInfo={popUpInfo} />} */}
+            {popUpInfo && <PopUp onCloseClick={() => setPopUpInfo(null)} popUpInfo={popUpInfo} />}
             <div style={{ padding: '1rem' }}>
                 <H3>{board.name}</H3>
             </div>
             <div style={{ display: 'flex', marginBottom: '2rem' }}>
                 {board.columns.map((column, i) => {
                     return (
+                        column.id &&
                         <ColumnWrapper key={i}>
                             <div>
                                 <button onClick={() => deleteColumn(column.id)}>Delete column</button>
@@ -95,6 +92,7 @@ const BoardDetails = ({ board }) => {
 
                                 {column.tasks.map((task, i) => {
                                     return (
+                                        task.id &&
                                         <div key={i}>
                                             <p>{task.name}</p>
                                             <button onClick={() => deleteTask(task.id)}>Delete task</button>
@@ -103,8 +101,9 @@ const BoardDetails = ({ board }) => {
                                     )
                                 })}
                             </div>
-                            <TaskForm columnId={column.id} boardId={board.id} refreshData={refreshData} />
+                            <TaskForm columnId={column.id} refreshData={refreshData} />
                         </ColumnWrapper>
+
                     )
                 })}
             </div>
