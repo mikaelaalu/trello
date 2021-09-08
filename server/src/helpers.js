@@ -1,4 +1,4 @@
-module.exports = function transformData(board) {
+module.exports = function formatBoardObject(board) {
     if (isEmpty(board)) {
         return {}
     }

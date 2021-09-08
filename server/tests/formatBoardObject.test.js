@@ -1,8 +1,8 @@
-const transformData = require('../src/helpers')
+const formatBoardObject = require('../src/helpers')
 
-describe('transformData', () => {
+describe('formatBoardObject', () => {
     test('transforming an empty list', () => {
-        expect(transformData([])).toEqual({})
+        expect(formatBoardObject([])).toEqual({})
     })
 
     test('transforming a board with a single column and single task', () => {
@@ -35,7 +35,7 @@ describe('transformData', () => {
             ],
         }
 
-        expect(transformData(input)).toEqual(output);
+        expect(formatBoardObject(input)).toEqual(output);
     })
 
     test('transforming a board with a single column and two tasks', () => {
@@ -81,7 +81,7 @@ describe('transformData', () => {
             ],
         }
 
-        expect(transformData(input)).toEqual(output);
+        expect(formatBoardObject(input)).toEqual(output);
     })
 
     test('transforming a board with two columns with two task each', () => {
@@ -159,7 +159,7 @@ describe('transformData', () => {
             ],
         }
 
-        const result = transformData(input);
+        const result = formatBoardObject(input);
         expect(result).toEqual(output);
     })
 })
