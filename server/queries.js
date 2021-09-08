@@ -1,4 +1,5 @@
 const Pool = require('pg').Pool
+const transformData = require('./helpers')
 
 const pool = new Pool({
     user: 'trello',
@@ -29,14 +30,16 @@ const getBoards = (req, res) => {
 
 const getBoardFromId = (req, res) => {
     const id = parseInt(req.params.id)
-    pool.query('SELECT * FROM boards WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT boards.name as boardName, boards.id as boardId, columns.name as columnName, columns.id as columnId, tasks.name as taskName, tasks.id as taskId, tasks.description as taskDescription FROM boards LEFT JOIN columns ON columns.board_id = boards.id LEFT JOIN tasks ON tasks.column_id = columns.id WHERE boards.id = $1', [id], (error, results) => {
         if (error) {
             throw error
         }
-        res.status(200).json(results.rows[0])
+
+        const data = transformData(results.rows)
+        console.log('data', data)
+        res.status(200).json(data)
     })
 }
-
 
 const deleteBoard = (req, res) => {
     const id = parseInt(req.params.id)
@@ -44,17 +47,7 @@ const deleteBoard = (req, res) => {
         if (error) {
             throw error
         }
-        pool.query('DELETE FROM columns WHERE board_id = $1', [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            pool.query('DELETE FROM tasks WHERE board_id = $1', [id], (error, results) => {
-                if (error) {
-                    throw error
-                }
-                res.status(200).send(results)
-            })
-        })
+        res.status(200).send(results)
     })
 
 
@@ -62,21 +55,13 @@ const deleteBoard = (req, res) => {
 
 const createColumn = (req, res) => {
     const { boardId, name } = req.body
+
+    console.log('board', boardId, name)
     pool.query('INSERT INTO columns (board_id, name) VALUES ($1, $2) RETURNING *', [boardId, name], (error, result) => {
         if (error) {
             throw error
         }
         res.status(201).send(result.rows[0])
-    })
-}
-
-const getColumns = (req, res) => {
-    const boardId = parseInt(req.params.id)
-    pool.query('SELECT * FROM columns WHERE board_id = $1', [boardId], (error, results) => {
-        if (error) {
-            throw error
-        }
-        res.status(200).json(results.rows)
     })
 }
 
@@ -86,34 +71,19 @@ const deleteColumn = (req, res) => {
         if (error) {
             throw error
         }
-        pool.query('DELETE FROM tasks WHERE column_id = $1', [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            res.status(200).send(results)
-        })
+        res.status(200).send(results)
     })
 
 
 }
 
 const createTask = (req, res) => {
-    const { columnId, boardId, name, description } = req.body
-    pool.query('INSERT INTO tasks (column_id, board_id, name, description) VALUES ($1, $2, $3, $4) RETURNING *', [columnId, boardId, name, description], (error, result) => {
+    const { columnId, name, description } = req.body
+    pool.query('INSERT INTO tasks (column_id, name, description) VALUES ($1, $2, $3) RETURNING *', [columnId, name, description], (error, result) => {
         if (error) {
             throw error
         }
         res.status(201).send(result.rows[0])
-    })
-}
-
-const getTasks = (req, res) => {
-    const boardId = parseInt(req.params.id)
-    pool.query('SELECT * FROM tasks WHERE board_id = $1', [boardId], (error, results) => {
-        if (error) {
-            throw error
-        }
-        res.status(200).json(results.rows)
     })
 }
 
@@ -127,19 +97,18 @@ const deleteTask = (req, res) => {
     })
 }
 
-
-
-
+const updateTask = (req, res) => {
+    const { id, name, description } = req.body
+    pool.query('')
+}
 
 module.exports = {
     getBoards,
     getBoardFromId,
     createBoard,
     deleteBoard,
-    getColumns,
     createColumn,
     deleteColumn,
     createTask,
-    getTasks,
     deleteTask
 }
