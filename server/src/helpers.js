@@ -12,6 +12,7 @@ module.exports = function formatBoardObject(board) {
                 tasks: tasks.map(item => ({
                     id: item.taskid,
                     name: item.taskname,
+                    description: item.taskdescription
                 })),
             }
         }),

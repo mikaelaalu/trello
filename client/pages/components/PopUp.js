@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { H4 } from './Typography'
+import { useState } from 'react'
+import { H4, Paragraph } from './Typography'
 import { StyledForm, FormInput } from './Form'
 import Button from './Button'
 const Wrapper = styled.div`
@@ -23,17 +24,38 @@ flex-direction: column;
 justify-content: space-between;
 `
 
-const PopUp = ({ onCloseClick, popUpInfo }) => {
+const PopUp = ({ onCloseClick, popUpInfo, refreshData }) => {
+    const [formValue, setFormValue] = useState('')
     console.log('popup', popUpInfo)
+
+    const updateTask = (taskId) => {
+        console.log('taskId', taskId)
+        fetch(`http://localhost:4000/tasks/${taskId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ description: formValue, id: taskId }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+            mode: "cors",
+        })
+            .then((res) => {
+                setFormValue('')
+                refreshData()
+                return res.json();
+            })
+    }
     return (
         <Wrapper>
             <PopUpBox>
                 <div>
                     <H4>{popUpInfo.name}</H4>
+                    <Paragraph> {popUpInfo.description} </Paragraph>
+
                     <StyledForm>
-                        <FormInput placeholder="Add description" />
+                        <FormInput placeholder="Add description" value={formValue} onChange={(e) => setFormValue(e.target.value)} />
                         <Button text="Save" onClick={(e) => {
                             e.preventDefault()
+                            updateTask(popUpInfo.id)
                         }} />
                     </StyledForm>
                 </div>

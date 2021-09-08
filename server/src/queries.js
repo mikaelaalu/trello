@@ -95,8 +95,14 @@ const deleteTask = (req, res) => {
 }
 
 const updateTask = (req, res) => {
-    const { id, name, description } = req.body
-    pool.query('')
+    const { id, description } = req.body
+    console.log('des', description, id)
+    pool.query('UPDATE tasks SET description = $1 WHERE id = $2', [description, id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        res.status(200).send(results)
+    })
 }
 
 module.exports = {
@@ -107,5 +113,6 @@ module.exports = {
     createColumn,
     deleteColumn,
     createTask,
-    deleteTask
+    deleteTask,
+    updateTask
 }

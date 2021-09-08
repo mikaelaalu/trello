@@ -77,7 +77,7 @@ const BoardDetails = ({ board }) => {
     }
     return (
         <Wrapper>
-            {popUpInfo && <PopUp onCloseClick={() => setPopUpInfo(null)} popUpInfo={popUpInfo} />}
+            {popUpInfo && <PopUp onCloseClick={() => setPopUpInfo(null)} popUpInfo={popUpInfo} refreshData={refreshData} />}
             <div style={{ padding: '1rem' }}>
                 <H3>{board.name}</H3>
             </div>
@@ -89,12 +89,12 @@ const BoardDetails = ({ board }) => {
                             <div>
                                 <button onClick={() => deleteColumn(column.id)}>Delete column</button>
                                 <h3>{column.name}</h3>
-
                                 {column.tasks.map((task, i) => {
                                     return (
                                         task.id &&
                                         <div key={i}>
                                             <p>{task.name}</p>
+                                            <p style={{ fontSize: '12px' }}>{task.description}</p>
                                             <button onClick={() => deleteTask(task.id)}>Delete task</button>
                                             <button onClick={() => setPopUpInfo(task)}>Update task</button>
                                         </div>

@@ -14,7 +14,7 @@ describe('formatBoardObject', () => {
                 columnid: 1,
                 taskname: 'Task',
                 taskid: 1,
-                taskdescription: null
+                taskdescription: 'Description'
             }
         ]
 
@@ -28,7 +28,8 @@ describe('formatBoardObject', () => {
                     tasks: [
                         {
                             id: 1,
-                            name: 'Task'
+                            name: 'Task',
+                            description: 'Description'
                         }
                     ]
                 }
@@ -47,7 +48,7 @@ describe('formatBoardObject', () => {
                 columnid: 1,
                 taskname: 'Task #1',
                 taskid: 1,
-                taskdescription: null
+                taskdescription: 'Description'
             },
             {
                 boardname: 'Board',
@@ -56,7 +57,7 @@ describe('formatBoardObject', () => {
                 columnid: 1,
                 taskname: 'Task #2',
                 taskid: 2,
-                taskdescription: null
+                taskdescription: 'Description'
             }
         ]
 
@@ -70,11 +71,13 @@ describe('formatBoardObject', () => {
                     tasks: [
                         {
                             id: 1,
-                            name: 'Task #1'
+                            name: 'Task #1',
+                            description: 'Description'
                         },
                         {
                             id: 2,
-                            name: 'Task #2'
+                            name: 'Task #2',
+                            description: 'Description'
                         }
                     ]
                 }
@@ -93,7 +96,7 @@ describe('formatBoardObject', () => {
                 columnid: 1,
                 taskname: 'Task #1',
                 taskid: 1,
-                taskdescription: null
+                taskdescription: 'Description'
             },
             {
                 boardname: 'Board',
@@ -102,7 +105,7 @@ describe('formatBoardObject', () => {
                 columnid: 1,
                 taskname: 'Task #2',
                 taskid: 2,
-                taskdescription: null
+                taskdescription: 'Description'
             },
             {
                 boardname: 'Board',
@@ -111,7 +114,7 @@ describe('formatBoardObject', () => {
                 columnid: 2,
                 taskname: 'Task #3',
                 taskid: 3,
-                taskdescription: null
+                taskdescription: 'Description'
             },
             {
                 boardname: 'Board',
@@ -120,7 +123,7 @@ describe('formatBoardObject', () => {
                 columnid: 2,
                 taskname: 'Task #4',
                 taskid: 4,
-                taskdescription: null
+                taskdescription: 'Description'
             },
         ]
 
@@ -134,11 +137,13 @@ describe('formatBoardObject', () => {
                     tasks: [
                         {
                             id: 1,
-                            name: 'Task #1'
+                            name: 'Task #1',
+                            description: 'Description'
                         },
                         {
                             id: 2,
-                            name: 'Task #2'
+                            name: 'Task #2',
+                            description: 'Description'
                         },
                     ],
                 },
@@ -148,11 +153,13 @@ describe('formatBoardObject', () => {
                     tasks: [
                         {
                             id: 3,
-                            name: 'Task #3'
+                            name: 'Task #3',
+                            description: 'Description'
                         },
                         {
                             id: 4,
-                            name: 'Task #4'
+                            name: 'Task #4',
+                            description: 'Description'
                         },
                     ],
                 }
