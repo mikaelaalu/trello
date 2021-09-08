@@ -36,7 +36,6 @@ const getBoardFromId = (req, res) => {
         }
 
         const data = transformData(results.rows)
-        console.log('data', data)
         res.status(200).json(data)
     })
 }
@@ -55,8 +54,6 @@ const deleteBoard = (req, res) => {
 
 const createColumn = (req, res) => {
     const { boardId, name } = req.body
-
-    console.log('board', boardId, name)
     pool.query('INSERT INTO columns (board_id, name) VALUES ($1, $2) RETURNING *', [boardId, name], (error, result) => {
         if (error) {
             throw error

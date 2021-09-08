@@ -119,7 +119,6 @@ const BoardDetails = ({ board }) => {
 export const getStaticPaths = async () => {
     const res = await fetch('http://localhost:4000/boards')
     const data = await res.json()
-    console.log('data', data)
     const paths = data.map((board) => {
         return {
             params: { id: board.id.toString() }
