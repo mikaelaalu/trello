@@ -2,7 +2,7 @@ import { StyledForm, FormInput } from './Form'
 import Button from './Button'
 import { useState } from 'react'
 
-const TaskForm = ({ columnId, refreshData }) => {
+const UpdateTask = ({ columnId, refreshData }) => {
     const [taskFormValue, setTaskFormValue] = useState('')
 
     const addTask = (columnId, e) => {
@@ -29,4 +29,4 @@ const TaskForm = ({ columnId, refreshData }) => {
     )
 }
 
-export default TaskForm
+export default UpdateTask

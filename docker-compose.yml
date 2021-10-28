@@ -10,3 +10,11 @@ services:
       - POSTGRES_DB=trello
     volumes:
       - ./data:/var/lib/postgresql/data
+  postgres-test:
+    image: postgres:13.4
+    ports:
+      - 5430:5432
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=trello
+      - POSTGRES_DB=trello
