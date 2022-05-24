@@ -12,26 +12,26 @@ const PageWrapper = styled.div`
   justify-content: center;
 `
 const Wrapper = styled.div`
-  border: 1px solid black;
   width: 51rem;
   height: 100vh;
 `
 const FlexWrapContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 2rem;
+  padding-top: 2rem;
 `
 const ColumnFlex = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #748083;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 4px;
   padding: 1rem;
-  margin: 1rem;
   width: 10rem;
   height: 7rem;
   align-items: center;
   justify-content: space-between;
+  margin: 1rem;
+  cursor: pointer;
 `
 const StyledForm = styled.form`
   display: flex;
@@ -87,14 +87,14 @@ export default function Home({ boards }) {
           {boards &&
             boards.map((board, i) => {
               return (
-                <ColumnFlex key={i}>
-                  <Link href={`/boards/${board.id}`}>
+                <Link key={i} href={`/boards/${board.id}`}>
+                  <ColumnFlex>
                     <Paragraph>{board.name}</Paragraph>
-                  </Link>
-                  <button onClick={() => deleteBoard(board.id)}>
-                    Delete board
-                  </button>
-                </ColumnFlex>
+                    <button onClick={() => deleteBoard(board.id)}>
+                      Delete board
+                    </button>
+                  </ColumnFlex>
+                </Link>
               )
             })}
         </FlexWrapContainer>
