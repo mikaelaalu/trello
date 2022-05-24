@@ -56,6 +56,7 @@ const BoardDetails = ({ board }) => {
       },
       mode: "cors",
     }).then((res) => {
+      console.log(res)
       refreshData()
       return res.json()
     })
@@ -84,11 +85,12 @@ const BoardDetails = ({ board }) => {
         />
       )}
       <div style={{ padding: "1rem" }}>
-        <H3>{board.boardname}</H3>
+        <H3>{board.name}</H3>
       </div>
       <div style={{ display: "flex", marginBottom: "2rem" }}>
-        {/* {board.columns &&
+        {board.columns &&
           board.columns.map((column, i) => {
+            console.log("col?", column.id)
             return (
               column.id && (
                 <ColumnWrapper key={i}>
@@ -121,7 +123,7 @@ const BoardDetails = ({ board }) => {
                 </ColumnWrapper>
               )
             )
-          })} */}
+          })}
       </div>
       <StyledForm onSubmit={() => addColumn(board.boardid)}>
         <FormInput

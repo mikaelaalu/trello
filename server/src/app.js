@@ -60,6 +60,13 @@ app.post("/columns", async (req, res) => {
   res.send(column)
 })
 
+app.delete("/columns/:id", async (req, res) => {
+  const id = req.params.id
+  const column = await db.deleteColumn(id)
+
+  res.send(column)
+})
+
 module.exports = app
 
 // app.get('/boards', db.getBoards)

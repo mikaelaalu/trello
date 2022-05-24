@@ -1,5 +1,5 @@
 const Pool = require("pg").Pool
-const transformData = require("./helpers")
+const formatBoardObject = require("./helpers")
 
 const pool = new Pool({
   user: "trello",
@@ -27,7 +27,7 @@ const getBoardFromId = async (id) => {
     "SELECT boards.name as boardName, boards.id as boardId, columns.name as columnName, columns.id as columnId, tasks.name as taskName, tasks.id as taskId, tasks.description as taskDescription FROM boards LEFT JOIN columns ON columns.board_id = boards.id LEFT JOIN tasks ON tasks.column_id = columns.id WHERE boards.id = $1",
     [id]
   )
-  return board.rows
+  return formatBoardObject(board.rows)
 }
 
 const deleteBoard = async (id) => {
@@ -45,14 +45,9 @@ const createColumn = async (boardId, name) => {
   return column.rows[0]
 }
 
-const deleteColumn = (req, res) => {
-  const id = parseInt(req.params.id)
-  pool.query("DELETE FROM columns WHERE id = $1", [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).send(results)
-  })
+const deleteColumn = async (id) => {
+  const column = await pool.query("DELETE FROM columns WHERE id = $1", [id])
+  return column
 }
 
 const createTask = (req, res) => {
@@ -81,7 +76,6 @@ const deleteTask = (req, res) => {
 
 const updateTask = (req, res) => {
   const { id, description } = req.body
-  console.log("des", description, id)
   pool.query(
     "UPDATE tasks SET description = $1 WHERE id = $2",
     [description, id],
