@@ -34,7 +34,6 @@ const BoardDetails = ({ board }) => {
   }
 
   const addColumn = (boardId) => {
-    console.log("id", boardId)
     fetch("http://localhost:4000/columns", {
       method: "POST",
       body: JSON.stringify({ name: columnFormValue, boardId }),
@@ -56,7 +55,6 @@ const BoardDetails = ({ board }) => {
       },
       mode: "cors",
     }).then((res) => {
-      console.log(res)
       refreshData()
       return res.json()
     })
@@ -74,7 +72,6 @@ const BoardDetails = ({ board }) => {
       return res.json()
     })
   }
-  console.log(board)
   return (
     <Wrapper>
       {popUpInfo && (
@@ -90,7 +87,6 @@ const BoardDetails = ({ board }) => {
       <div style={{ display: "flex", marginBottom: "2rem" }}>
         {board.columns &&
           board.columns.map((column, i) => {
-            console.log("col?", column.id)
             return (
               column.id && (
                 <ColumnWrapper key={i}>
@@ -125,7 +121,7 @@ const BoardDetails = ({ board }) => {
             )
           })}
       </div>
-      <StyledForm onSubmit={() => addColumn(board.boardid)}>
+      <StyledForm onSubmit={() => addColumn(board.id)}>
         <FormInput
           placeholder="Column title"
           type="text"

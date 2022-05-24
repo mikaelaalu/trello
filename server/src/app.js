@@ -56,8 +56,12 @@ app.get("/boards/:id", async (req, res) => {
 
 app.post("/columns", async (req, res) => {
   const { boardId, name } = req.body
-  const column = await db.createColumn(boardId, name)
-  res.send(column)
+  try {
+    const column = await db.createColumn(boardId, name)
+    res.status(201).send(column)
+  } catch {
+    res.sendStatus(500)
+  }
 })
 
 app.delete("/columns/:id", async (req, res) => {
