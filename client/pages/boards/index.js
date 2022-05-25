@@ -66,19 +66,6 @@ export default function Home({ boards }) {
       })
   }
 
-  const deleteBoard = (boardId) => {
-    fetch(`http://localhost:4000/boards/${boardId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-    }).then((info) => {
-      console.log("Board deleted", info)
-      refreshData()
-    })
-  }
-
   return (
     <PageWrapper>
       <Wrapper>
@@ -90,9 +77,6 @@ export default function Home({ boards }) {
                 <Link key={i} href={`/boards/${board.id}`}>
                   <ColumnFlex>
                     <Paragraph>{board.name}</Paragraph>
-                    <button onClick={() => deleteBoard(board.id)}>
-                      Delete board
-                    </button>
                   </ColumnFlex>
                 </Link>
               )

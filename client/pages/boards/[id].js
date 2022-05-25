@@ -5,22 +5,35 @@ import { H3 } from "../components/Typography"
 import { StyledForm, FormInput } from "../components/Form"
 import Button from "../components/Button"
 import PopUp from "../components/PopUp"
-import UpdateTask from "../components/UpdateTask"
+import AddTask from "../components/AddTask"
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 1rem;
 `
-const ColumnWrapper = styled.div`
+const Column = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 0.5rem;
   width: 13rem;
   height: 70vh;
-  border: 1px solid black;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 1rem;
   overflow-y: scroll;
   justify-content: space-between;
+`
+
+const ColumnWrapper = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+`
+
+const FlexWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+  padding-bottom: 1rem;
 `
 
 const BoardDetails = ({ board }) => {
@@ -33,7 +46,8 @@ const BoardDetails = ({ board }) => {
     router.replace(router.asPath)
   }
 
-  const addColumn = (boardId) => {
+  const addColumn = (boardId, e) => {
+    e.preventDefault()
     fetch("http://localhost:4000/columns", {
       method: "POST",
       body: JSON.stringify({ name: columnFormValue, boardId }),
@@ -41,10 +55,15 @@ const BoardDetails = ({ board }) => {
         "Content-Type": "application/json",
       },
       mode: "cors",
-    }).then((res) => {
-      setColumnFormValue("")
-      return res.json()
     })
+      .then((res) => {
+        setColumnFormValue("")
+        return res.json()
+      })
+      .then((info) => {
+        console.log("Column created", info)
+        refreshData()
+      })
   }
 
   const deleteColumn = (columnId) => {
@@ -72,6 +91,21 @@ const BoardDetails = ({ board }) => {
       return res.json()
     })
   }
+
+  const deleteBoard = (boardId) => {
+    fetch(`http://localhost:4000/boards/${boardId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    }).then((info) => {
+      console.log("Board deleted", info)
+
+      router.push("/boards")
+    })
+  }
+
   return (
     <Wrapper>
       {popUpInfo && (
@@ -81,15 +115,16 @@ const BoardDetails = ({ board }) => {
           refreshData={refreshData}
         />
       )}
-      <div style={{ padding: "1rem" }}>
+      <FlexWrapper>
         <H3>{board.name}</H3>
-      </div>
-      <div style={{ display: "flex", marginBottom: "2rem" }}>
+        <button onClick={() => deleteBoard(board.id)}>Delete board</button>
+      </FlexWrapper>
+      <ColumnWrapper>
         {board.columns &&
           board.columns.map((column, i) => {
             return (
               column.id && (
-                <ColumnWrapper key={i}>
+                <Column key={i}>
                   <div>
                     <button onClick={() => deleteColumn(column.id)}>
                       Delete column
@@ -115,13 +150,13 @@ const BoardDetails = ({ board }) => {
                     })}
                   </div>
 
-                  <UpdateTask columnId={column.id} refreshData={refreshData} />
-                </ColumnWrapper>
+                  <AddTask columnId={column.id} refreshData={refreshData} />
+                </Column>
               )
             )
           })}
-      </div>
-      <StyledForm onSubmit={() => addColumn(board.id)}>
+      </ColumnWrapper>
+      <StyledForm onSubmit={(e) => addColumn(board.id, e)}>
         <FormInput
           placeholder="Column title"
           type="text"

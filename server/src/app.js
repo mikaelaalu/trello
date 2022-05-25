@@ -15,10 +15,10 @@ app.get("/", (req, res) => {
 
 app.post("/boards", async (req, res) => {
   const { name } = req.body
-  // if (name.length < 4) {
-  //     res.status(400).send({ error: 'Name is too short' })
-  //     return
-  // }
+  if (name.length < 2) {
+    res.status(400).send({ error: "Name is too short" })
+    return
+  }
   try {
     const data = await db.createBoard(name)
     res.status(201).send(data)
@@ -56,6 +56,10 @@ app.get("/boards/:id", async (req, res) => {
 
 app.post("/columns", async (req, res) => {
   const { boardId, name } = req.body
+  if (name.length < 2) {
+    res.status(400).send({ error: "Name is too short" })
+    return
+  }
   try {
     const column = await db.createColumn(boardId, name)
     res.status(201).send(column)
@@ -69,6 +73,27 @@ app.delete("/columns/:id", async (req, res) => {
   const column = await db.deleteColumn(id)
 
   res.send(column)
+})
+
+app.post("/tasks", async (req, res) => {
+  const { columnId, name, description } = req.body
+  if (name.length < 2) {
+    res.status(400).send({ error: "Name is too short" })
+    return
+  }
+  try {
+    const task = await db.createTask(columnId, name, description)
+    res.status(201).send(task)
+  } catch {
+    res.sendStatus(500)
+  }
+})
+
+app.delete("/tasks/:id", async (req, res) => {
+  const id = req.params.id
+  const task = await db.deleteTask(id)
+
+  res.send(task)
 })
 
 module.exports = app

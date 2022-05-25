@@ -50,28 +50,18 @@ const deleteColumn = async (id) => {
   return column
 }
 
-const createTask = (req, res) => {
-  const { columnId, name, description } = req.body
-  pool.query(
+const createTask = async (columnId, name, description) => {
+  const task = await pool.query(
     "INSERT INTO tasks (column_id, name, description) VALUES ($1, $2, $3) RETURNING *",
-    [columnId, name, description],
-    (error, result) => {
-      if (error) {
-        throw error
-      }
-      res.status(201).send(result.rows[0])
-    }
+    [columnId, name, description]
   )
+
+  return task
 }
 
-const deleteTask = (req, res) => {
-  const id = parseInt(req.params.id)
-  pool.query("DELETE FROM tasks WHERE id = $1", [id], (error, results) => {
-    if (error) {
-      throw error
-    }
-    res.status(200).send(results)
-  })
+const deleteTask = async (id) => {
+  const task = await pool.query("DELETE FROM tasks WHERE id = $1", [id])
+  return task
 }
 
 const updateTask = (req, res) => {
