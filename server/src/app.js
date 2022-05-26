@@ -89,6 +89,18 @@ app.post("/tasks", async (req, res) => {
   }
 })
 
+app.put("/tasks/:id", async (req, res) => {
+  const { id, description } = req.body
+  console.log(id, description)
+  try {
+    const task = await db.updateTask(id, description)
+    res.status(201).send(task)
+  } catch {
+    console.log("in here??")
+    res.sendStatus(500)
+  }
+})
+
 app.delete("/tasks/:id", async (req, res) => {
   const id = req.params.id
   const task = await db.deleteTask(id)

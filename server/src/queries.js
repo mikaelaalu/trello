@@ -64,33 +64,27 @@ const deleteTask = async (id) => {
   return task
 }
 
-const updateTask = (req, res) => {
-  const { id, description } = req.body
-  pool.query(
+const updateTask = async (id, description) => {
+  const task = await pool.query(
     "UPDATE tasks SET description = $1 WHERE id = $2",
-    [description, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).send(results)
-    }
+    [description, id]
   )
+  return task
 }
 
-const updateColumnId = (req, res) => {
-  const { id, columnId } = req.body
-  pool.query(
-    "UPDATE tasks SET column_id = $1 WHERE id = $2",
-    [columnId, id],
-    (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).send(results)
-    }
-  )
-}
+// const updateColumnId = (req, res) => {
+//   const { id, columnId } = req.body
+//   pool.query(
+//     "UPDATE tasks SET column_id = $1 WHERE id = $2",
+//     [columnId, id],
+//     (error, results) => {
+//       if (error) {
+//         throw error
+//       }
+//       res.status(200).send(results)
+//     }
+//   )
+// }
 
 module.exports = {
   getBoards,
@@ -102,5 +96,5 @@ module.exports = {
   createTask,
   deleteTask,
   updateTask,
-  updateColumnId,
+  // updateColumnId,
 }
