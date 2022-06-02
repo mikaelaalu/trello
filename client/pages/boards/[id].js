@@ -6,6 +6,7 @@ import { StyledForm, FormInput } from "../components/Form"
 import Button from "../components/Button"
 import PopUp from "../components/PopUp"
 import AddTask from "../components/AddTask"
+import DeletePopUp from "../components/DeletePopUp"
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,10 +18,13 @@ const Column = styled.div`
   flex-direction: column;
   width: 13rem;
   height: 70vh;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 0.5px solid rgba(99, 99, 99, 0.4);
+  box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
   padding: 1rem;
   overflow-y: scroll;
   justify-content: space-between;
+  background-color: #ebecf0;
+  border-radius: 3px;
 `
 
 const ColumnWrapper = styled.div`
@@ -36,9 +40,25 @@ const FlexWrapper = styled.div`
   padding-bottom: 1rem;
 `
 
+const DelButton = styled.button`
+  cursor: pointer;
+  border: none;
+  width: 20px;
+  height: 20px;
+`
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  background-color: inherit;
+`
+
 const BoardDetails = ({ board }) => {
   const [columnFormValue, setColumnFormValue] = useState("")
   const [popUpInfo, setPopUpInfo] = useState()
+  const [deletePopUpInfo, setDeletePopUpInfo] = useState()
+  const [id, setId] = useState()
 
   const router = useRouter()
 
@@ -126,9 +146,17 @@ const BoardDetails = ({ board }) => {
               column.id && (
                 <Column key={i}>
                   <div>
-                    <button onClick={() => deleteColumn(column.id)}>
-                      Delete column
-                    </button>
+                    <ButtonWrapper>
+                      <DelButton
+                        onClick={() => {
+                          setDeletePopUpInfo(true)
+                          setId(column.id)
+                        }}
+                      >
+                        X
+                      </DelButton>
+                    </ButtonWrapper>
+
                     <h3>{column.name}</h3>
                     {column.tasks.map((task, i) => {
                       return (
@@ -155,6 +183,13 @@ const BoardDetails = ({ board }) => {
               )
             )
           })}
+
+        {deletePopUpInfo && (
+          <DeletePopUp
+            onCloseClick={() => setDeletePopUpInfo(false)}
+            deleteColumn={() => deleteColumn(id)}
+          />
+        )}
       </ColumnWrapper>
       <StyledForm onSubmit={(e) => addColumn(board.id, e)}>
         <FormInput

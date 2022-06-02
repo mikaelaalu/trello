@@ -59,8 +59,8 @@ const PopUp = ({ onCloseClick, popUpInfo, refreshData }) => {
             <Button
               text="Save"
               onClick={(e) => {
-                e.preventDefault()
                 updateTask(popUpInfo.id)
+                onCloseClick()
               }}
             />
           </StyledForm>
