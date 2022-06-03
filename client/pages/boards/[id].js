@@ -7,6 +7,7 @@ import Button from "../components/Button"
 import PopUp from "../components/PopUp"
 import AddTask from "../components/AddTask"
 import DeletePopUp from "../components/DeletePopUp"
+import Task from "../components/Task"
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,11 +55,17 @@ const ButtonWrapper = styled.div`
   background-color: inherit;
 `
 
+const TaskWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`
+
 const BoardDetails = ({ board }) => {
   const [columnFormValue, setColumnFormValue] = useState("")
   const [popUpInfo, setPopUpInfo] = useState()
   const [deletePopUpInfo, setDeletePopUpInfo] = useState()
-  const [id, setId] = useState()
+  const [selectedColumnId, setSelectedColumnId] = useState()
 
   const router = useRouter()
 
@@ -88,19 +95,6 @@ const BoardDetails = ({ board }) => {
 
   const deleteColumn = (columnId) => {
     fetch(`http://localhost:4000/columns/${columnId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-    }).then((res) => {
-      refreshData()
-      return res.json()
-    })
-  }
-
-  const deleteTask = (taskId) => {
-    fetch(`http://localhost:4000/tasks/${taskId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -150,7 +144,7 @@ const BoardDetails = ({ board }) => {
                       <DelButton
                         onClick={() => {
                           setDeletePopUpInfo(true)
-                          setId(column.id)
+                          setSelectedColumnId(column.id)
                         }}
                       >
                         X
@@ -158,24 +152,20 @@ const BoardDetails = ({ board }) => {
                     </ButtonWrapper>
 
                     <h3>{column.name}</h3>
-                    {column.tasks.map((task, i) => {
-                      return (
-                        task.id && (
-                          <div key={i}>
-                            <p>{task.name}</p>
-                            <p style={{ fontSize: "12px" }}>
-                              {task.description}
-                            </p>
-                            <button onClick={() => deleteTask(task.id)}>
-                              Delete task
-                            </button>
-                            <button onClick={() => setPopUpInfo(task)}>
-                              Update task
-                            </button>
-                          </div>
+                    <TaskWrapper>
+                      {column.tasks.map((task, i) => {
+                        return (
+                          task.id && (
+                            <Task
+                              key={i}
+                              task={task}
+                              setPopUpInfo={setPopUpInfo}
+                              refreshData={refreshData}
+                            />
+                          )
                         )
-                      )
-                    })}
+                      })}
+                    </TaskWrapper>
                   </div>
 
                   <AddTask columnId={column.id} refreshData={refreshData} />
@@ -187,7 +177,7 @@ const BoardDetails = ({ board }) => {
         {deletePopUpInfo && (
           <DeletePopUp
             onCloseClick={() => setDeletePopUpInfo(false)}
-            deleteColumn={() => deleteColumn(id)}
+            deleteColumn={() => deleteColumn(selectedColumnId)}
           />
         )}
       </ColumnWrapper>

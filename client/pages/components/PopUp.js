@@ -7,7 +7,6 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   position: absolute;
-  /* background-color: rgba(0, 0, 0, 0.4); */
 `
 const PopUpBox = styled.div`
   width: 15rem;
@@ -15,7 +14,8 @@ const PopUpBox = styled.div`
   position: absolute;
   top: 15rem;
   left: 43vw;
-  border: 1px solid black;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 2px;
   border-radius: 2px;
   padding: 1rem;
   background-color: white;
@@ -24,9 +24,14 @@ const PopUpBox = styled.div`
   justify-content: space-between;
 `
 
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+
 const PopUp = ({ onCloseClick, popUpInfo, refreshData }) => {
   const [formValue, setFormValue] = useState("")
-  console.log("popup", popUpInfo)
 
   const updateTask = (taskId) => {
     console.log("taskId", taskId)
@@ -40,6 +45,21 @@ const PopUp = ({ onCloseClick, popUpInfo, refreshData }) => {
     }).then((res) => {
       setFormValue("")
       refreshData()
+      onCloseClick()
+      return res.json()
+    })
+  }
+
+  const deleteTask = (taskId) => {
+    fetch(`http://localhost:4000/tasks/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    }).then((res) => {
+      refreshData()
+      onCloseClick()
       return res.json()
     })
   }
@@ -60,14 +80,14 @@ const PopUp = ({ onCloseClick, popUpInfo, refreshData }) => {
               text="Save"
               onClick={(e) => {
                 updateTask(popUpInfo.id)
-                onCloseClick()
               }}
             />
           </StyledForm>
         </div>
-        <div>
-          <Button onClick={onCloseClick} text="Close" />
-        </div>
+        <ButtonContainer>
+          <Button onClick={() => onCloseClick()} text="Close" />
+          <Button text="Delete task" onClick={() => deleteTask(popUpInfo.id)} />
+        </ButtonContainer>
       </PopUpBox>
     </Wrapper>
   )

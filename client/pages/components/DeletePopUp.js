@@ -14,7 +14,6 @@ const PopUpBox = styled.div`
   top: 15rem;
   left: 43vw;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 4px;
   border-radius: 2px;
   padding: 1rem;
   background-color: white;
@@ -47,7 +46,6 @@ const DeletePopUp = ({ onCloseClick, deleteColumn }) => {
           <Button
             text="No"
             onClick={(e) => {
-              console.log("hej")
               e.preventDefault()
               onCloseClick()
             }}
